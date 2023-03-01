@@ -12,6 +12,7 @@ const therapistList = {
     firstName: null,
     lastName: null,
     gender: null,
+    country: null,
     calendLink: null
 }
 let therapis = []
@@ -145,7 +146,7 @@ const login = async(req,res)=>{
                 email: email
             }
         }).then(rsw =>{
-            res.status(200).json([{email:email,fname:req.decoded.firstName}])
+            res.status(200).json([{email:email,fname:req.decoded.firstName,user:req.decoded.userType}])
 
             }).catch(err=>{
                    console.log(err)
@@ -153,6 +154,7 @@ const login = async(req,res)=>{
     }
     //SHOW THERAPIST
     const showTheraph = async(req,res)=>{
+        
         Therapist.findAll({
             order: [["expYear", "ASC"]]
         }).then(results => {
@@ -160,14 +162,15 @@ const login = async(req,res)=>{
                 console.log(results + 'is null')
             }else {
                 results.map(result => {
-                    let Therap = object.create(therapistList)
+                    let Therap = Object.create(therapistList)
                     Therap.firstName = result.firstName
                     Therap.lastName = result.lastName
                     Therap.gender = result.gender
+                    Therap.country = result.country
                     Therap.calendLink = result.calendLink
                     therapis.push(Therap)
                 })
-                res.status(200).json([{result}])}
+                res.status(200).json([{allTheraph:therapis}])}
             }).catch(error => {
                 console.log(error)
         })

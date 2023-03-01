@@ -7,6 +7,6 @@ routeManager.post("/registerClient",clRegister)
 routeManager.post("/registerTheraph",thpRegister)
 routeManager.post('/Auth',login)
 routeManager.post('/dashboard',verifyAuth,dashboard)
-//routeManager.post('/allTheraph',verifyAuth,showTheraph)
+routeManager.get('/allTheraph',verifyAuth,showTheraph)
 
 module.exports = {routeManager}
