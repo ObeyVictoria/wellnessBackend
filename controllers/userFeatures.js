@@ -4,6 +4,7 @@ const { Therapist } = require("../models/therapist.js")
 const { Users } = require("../models/users.js")
 const jwt = require("jsonwebtoken")
 const bcrypt = require('bcryptjs')
+
 const saltRounds = bcrypt.genSaltSync(10)
 const secret = "feminineWellness"
 
@@ -136,19 +137,19 @@ const login = async(req,res)=>{
         });
     }
     //USERS DASHBOARD
-    const dashboard = async(req,res)=>{
+    const dashboard =(req,res)=>{
         email = req.decoded.email
-
+        //res.status(200).json([{ message: req.decoded }])
         Users.findAll({
             where: {
                 email: email
             }
-        }).then(rs =>{
-            console.log(rs)
-                res.status(200).json([{rs}])
-        }).catch(err => {
-            console.log(err)
-        })
+        }).then(rsw =>{
+            res.status(200).json([{email:email,fname:req.decoded.firstName}])
+
+            }).catch(err=>{
+                   console.log(err)
+        }) 
     }
     //SHOW THERAPIST
     const showTheraph = async(req,res)=>{

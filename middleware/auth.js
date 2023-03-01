@@ -10,7 +10,7 @@ try{
 const bearer = bearHeader.split(' ')
 const b_token = bearer[1]
 req.token = b_token
- req.decoded = jwt.verify(b_token,"wellness")
+ req.decoded = jwt.verify(b_token,"feminineWellness")
 next();
 }
 catch(err){
