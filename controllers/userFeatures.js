@@ -13,7 +13,8 @@ const therapistList = {
     lastName: null,
     gender: null,
     country: null,
-    calendLink: null
+    calendLink: null,
+    therapistId: null
 }
 let therapis = []
 
@@ -177,6 +178,7 @@ const login = async(req,res)=>{
                     Therap.gender = result.gender
                     Therap.country = result.country
                     Therap.calendLink = result.calendLink
+                    Therap.therapistId = result.therapistId
                     therapis.push(Therap)
                 })
                 res.status(200).json([{allTheraph:therapis}])}
@@ -184,5 +186,24 @@ const login = async(req,res)=>{
                 console.log(error)
         })
     }
+
+    //SHOW PROFILE OF A THERAPIST
+    const profile = (req,res)=>{
+        id = req.body.therapistId
+        //res.status(200).json([{ message: req.decoded }])
+        Therapist.findAll({
+            where: {
+                therapistId: id
+            }
+        }).then(rsw =>{
+            res.status(200).json([{fname:req.decoded.firstName,user:req.decoded.userType,lName: req.decoded.lastName,gender: req.decoded.gender,exp1: req.decoded.exp1,calendLink:req.decoded.calendLink,
+                exp2: req.decoded.exp2,
+                expYear: req.decoded.eYear,
+                country:req.decoded.country}])
+
+            }).catch(err=>{
+                   console.log(err)
+        }) 
+    }
     
-module.exports = {clRegister,thpRegister,login,dashboard,showTheraph}
+module.exports = {clRegister,thpRegister,login,dashboard,showTheraph,profile}
