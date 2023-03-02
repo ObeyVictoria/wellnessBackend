@@ -8,14 +8,14 @@ const bcrypt = require('bcryptjs')
 const saltRounds = bcrypt.genSaltSync(10)
 const secret = "feminineWellness"
 
-const therapistList = {
+/*const therapistList = {
     firstName: null,
     lastName: null,
     gender: null,
     country: null,
     calendLink: null
 }
-let therapis = []
+let therapis = []*/
 
 //CLIENT REGISTRATION
 const clRegister = async(req, res) =>{
@@ -125,7 +125,8 @@ const login = async(req,res)=>{
           const validity  =  bcrypt.compareSync(password,rs.dataValues.password)
           if(validity == true){
               const token = jwt.sign(rs.dataValues,secret)
-              res.status(200).json([{ message: token}])
+              const type = rs.dataValues.userType
+              res.status(200).json([{ message: token, user: type}])
           }else{
               res.status(200).json([{ message: "invalid" }]) 
           }
@@ -154,14 +155,30 @@ const login = async(req,res)=>{
     }
     //SHOW THERAPIST
     const showTheraph = async(req,res)=>{
+        firstName = req.decoded.firstName
+        lastName = req.decoded.lastName
+        gender = req.decoded.gender
+        country = req.decoded.country
+        calendLink = req.decoded.calendLink
+        therapistId = req.decoded.therapistId
         
         Therapist.findAll({
             order: [["expYear", "ASC"]]
         }).then(results => {
+            let therapis=[]
             if (typeof results === undefined) {
                 console.log(results + 'is null')
             }else {
-                results.map(result => {
+                results.map(result => 
+                    therapis.push({
+                        firstName,
+                        lastName,
+                        gender,
+                        country,
+                        calendLink,
+                        therapistId
+                    })
+                    /*{
                     let Therap = Object.create(therapistList)
                     Therap.firstName = result.firstName
                     Therap.lastName = result.lastName
@@ -169,7 +186,7 @@ const login = async(req,res)=>{
                     Therap.country = result.country
                     Therap.calendLink = result.calendLink
                     therapis.push(Therap)
-                })
+                }*/)
                 res.status(200).json([{allTheraph:therapis}])}
             }).catch(error => {
                 console.log(error)
